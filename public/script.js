@@ -32,7 +32,7 @@ canvas.addEventListener('mouseup', function(){
 // Player
 class Player {
   constructor(){
-    this.x = canvas.width;
+    this.x = 0;
     this.y = canvas.height/2;
     this.radius = 50;
     this.angle = 0;
@@ -71,5 +71,71 @@ class Player {
 }
 
 const player = new Player();
+
 // Food Items
+
+const foodItems = [];
+
+class Food {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = canvas.height + Math.random() * canvas.height;
+    this.radius = 50;
+    this.speed = Math.random() * 5 + 1;
+    this.distance;
+    this.counted = false;
+  }
+
+  update(){
+    this.y -= this.speed;
+    const dx = this.x - player.x;
+    const dy = this.y - player.y;
+    this.distance = Math.sqrt(dx*dx + dy*dy);
+  }
+
+  draw(){
+    ctx.fillStyle = 'blue';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.closePath();
+    ctx.stroke();
+  }
+}
+
+function handleFoodItems(){
+  if (gameFrame % 50 == 0){
+    foodItems.push(new Food());
+  }
+  for (let i = 0; i < foodItems.length; i++){
+    foodItems[i].update();
+    foodItems[i].draw();
+  }
+  for (let i = 0; i < foodItems.length; i++){
+    if (foodItems[i].y < -50){
+      foodItems.splice(i, 1);
+    }
+    if (foodItems[i].distance < foodItems[i].radius + player.radius){
+      if (!foodItems[i].counted){
+        score++;
+        foodItems[i].counted = true;
+        foodItems[i].splice(i, 1);
+      }
+    }
+  }
+}
+
 // Animation Loop
+
+function animate(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  handleFoodItems();
+  player.update();
+  player.draw();
+  ctx.fillStyle = 'black';
+  ctx.fillText('score: ' + score, 10, 50);
+  gameFrame++;
+  requestAnimationFrame(animate);
+}
+
+animate();
