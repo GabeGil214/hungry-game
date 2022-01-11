@@ -84,6 +84,7 @@ class Food {
     this.speed = Math.random() * 5 + 1;
     this.distance;
     this.counted = false;
+    this.sound = Math.random() <= 0.5 ? 'sound1' : 'sound2';
   }
 
   update(){
@@ -103,6 +104,11 @@ class Food {
   }
 }
 
+const foodCrunch1 = document.createElement('audio');
+foodCrunch1.src = 'crunch4.ogg'
+const foodCrunch2 = document.createElement('audio');
+foodCrunch2.src = 'crunch7.ogg'
+
 function handleFoodItems(){
   if (gameFrame % 50 == 0){
     foodItems.push(new Food());
@@ -117,9 +123,14 @@ function handleFoodItems(){
     }
     if (foodItems[i].distance < foodItems[i].radius + player.radius){
       if (!foodItems[i].counted){
+        if (foodItems[i].sound == 'sound1'){
+          foodCrunch1.play();
+        } else {
+          foodCrunch2.play();
+        }
         score++;
         foodItems[i].counted = true;
-        foodItems[i].splice(i, 1);
+        foodItems.splice(i, 1);
       }
     }
   }
