@@ -105,9 +105,9 @@ class Food {
 }
 
 const foodCrunch1 = document.createElement('audio');
-foodCrunch1.src = 'crunch4.ogg'
+foodCrunch1.src = 'media/crunch.3.ogg'
 const foodCrunch2 = document.createElement('audio');
-foodCrunch2.src = 'crunch7.ogg'
+foodCrunch2.src = 'media/crunch.7.ogg'
 
 function handleFoodItems(){
   if (gameFrame % 50 == 0){
